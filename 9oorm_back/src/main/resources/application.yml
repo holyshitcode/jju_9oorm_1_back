@@ -25,4 +25,6 @@ spring:
 #      username: sa
 #      password:
 #      driver-class-name: org.h2.Driver
-
+server:
+  address: 0.0.0.0
+  port: 8080

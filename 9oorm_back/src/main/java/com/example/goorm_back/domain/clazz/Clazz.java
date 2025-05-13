@@ -1,5 +1,6 @@
 package com.example.goorm_back.domain.clazz;
 
+import com.example.goorm_back.domain.user.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +30,9 @@ public class Clazz {
     private String longitude; // 클래스 경도
 
     private Category category;
+
+    @OneToOne
+    private Member owner; // 클래스 등록자
 
     /**
      *  리뷰 생길때 ratingCounts, ratingAvg 변동예정

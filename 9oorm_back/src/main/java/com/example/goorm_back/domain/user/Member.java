@@ -23,12 +23,12 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private GenderType gender; //성별
 
     private String phoneNumber;
 
     private String userName;
-
 
     private String password;
 
@@ -37,7 +37,7 @@ public class Member {
     private String profileImage; //프로필 이미지
 
     @Enumerated(EnumType.STRING)
-    private Role role; //일반 사용자 와 사업자 구분
+    private Role role; //일반 사용자와 사업자 구분
 
     private String address; // 거주지 주소
 
@@ -62,13 +62,14 @@ public class Member {
     @OneToMany(mappedBy = "member", orphanRemoval = true)
     private List<CommunityBoard> communityBoards = new ArrayList<>();
 
-   @OneToMany(mappedBy = "member", orphanRemoval = true)
+    @OneToMany(mappedBy = "member", orphanRemoval = true)
     private List<BoardComment> boardComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", orphanRemoval = true)
     private List<NoticeBoard> noticeBoards = new ArrayList<>();
 
-
+    @OneToOne
+    private UserBusinessInfo userBusinessInfo; // 사업자정보 (사업자인 경우만 등록)
 
 
 
