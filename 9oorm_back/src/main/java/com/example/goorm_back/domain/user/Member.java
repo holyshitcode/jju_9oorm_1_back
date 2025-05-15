@@ -19,59 +19,58 @@ import java.util.List;
 @Setter
 public class Member {
 
-    @Id @GeneratedValue
-    @Column(name = "member_id")
-    private Long id;
+	@Id
+	@GeneratedValue
+	@Column(name = "member_id")
+	private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private GenderType gender; //성별
+	private GenderType gender; //성별
 
-    private String phoneNumber;
+	private String phoneNumber;
 
-    private String userName;
+	private String userName;
 
-    private String password;
+	private String password;
 
-    private String email;
+	private String email;
 
-    private String profileImage; //프로필 이미지
+	private String profileImage; //프로필 이미지
 
-    @Enumerated(EnumType.STRING)
-    private Role role; //일반 사용자와 사업자 구분
+	// 소셜 로그인 추가 필드
+	private String provider;
+	private Long kakaoId;
 
-    private String address; // 거주지 주소
+	@Enumerated(EnumType.STRING)
+	private Role role; //일반 사용자 와 사업자 구분
 
-    @Column(unique = true)
-    private String nickname;
+	private String address; // 거주지 주소
 
-    @OneToOne
-    private Payment payment; //결제정보
+	@Column(unique = true)
+	private String nickname;
 
-    @OneToOne
-    private Cart cart;
+	@OneToOne
+	private Payment payment; //결제정보
 
-    @OneToOne
-    private Bookmark bookmark;
+	@OneToOne
+	private Cart cart;
 
-    @OneToMany(mappedBy = "member", orphanRemoval = true)
-    private List<ReviewBoard> reviewBoards = new ArrayList<>();
+	@OneToOne
+	private Bookmark bookmark;
 
-    @OneToMany(mappedBy = "member", orphanRemoval = true)
-    private List<ClazzReservation> classReservations = new ArrayList<>();
+	@OneToMany(mappedBy = "member", orphanRemoval = true)
+	private List<ReviewBoard> reviewBoards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", orphanRemoval = true)
-    private List<CommunityBoard> communityBoards = new ArrayList<>();
+	@OneToMany(mappedBy = "member", orphanRemoval = true)
+	private List<ClazzReservation> classReservations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", orphanRemoval = true)
-    private List<BoardComment> boardComments = new ArrayList<>();
+	@OneToMany(mappedBy = "member", orphanRemoval = true)
+	private List<CommunityBoard> communityBoards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", orphanRemoval = true)
-    private List<NoticeBoard> noticeBoards = new ArrayList<>();
+	@OneToMany(mappedBy = "member", orphanRemoval = true)
+	private List<BoardComment> boardComments = new ArrayList<>();
 
-    @OneToOne
-    private UserBusinessInfo userBusinessInfo; // 사업자정보 (사업자인 경우만 등록)
-
-
+	@OneToMany(mappedBy = "member", orphanRemoval = true)
+	private List<NoticeBoard> noticeBoards = new ArrayList<>();
 
 
 }

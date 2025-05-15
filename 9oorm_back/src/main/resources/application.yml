@@ -1,21 +1,44 @@
-
 spring:
   datasource:
-#    url: jdbc:h2:tcp://localhost/~/testJPA2
+    #    url: jdbc:h2:tcp://localhost/~/testJPA2
     url: jdbc:h2:mem:test
     username: sa
     password:
     driver-class-name: org.h2.Driver
   application:
-    name:  groom_back
+    name: groom_back
 
   jpa:
     hibernate:
       ddl-auto: create
-    show-sql:  true
+    show-sql: true
     properties:
       hibernate:
-        format_sql:  true
+        format_sql: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: 7bc70f2c1bef059689a29b15c6c2bebe
+            client-secret: ${KAKAO_CLIENT_SECRET}
+            redirect-uri: "{ baseUrl }/auth/kakao/callback
+            authorization-grant-type: authorization_code
+            scope:
+              - profile_nickname
+              - account_email
+            client-name: Kakao
+
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+
+
 
 
 
