@@ -29,7 +29,10 @@ public class Clazz {
 
     private String longitude; // 클래스 경도
 
-    private Category category;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "clazz_category", joinColumns = @JoinColumn(name = "clazz_id"))
+    @Enumerated(EnumType.STRING)
+    private List<Category> categories = new ArrayList<>();
 
     @OneToOne
     private Member owner; // 클래스 등록자

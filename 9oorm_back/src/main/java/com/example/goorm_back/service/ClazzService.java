@@ -33,8 +33,8 @@ public class ClazzService {
         clazz.setClazzProfileImage(saveClazzRequestForm.getClazzProfileImage());
         clazz.setLatitude(saveClazzRequestForm.getLatitude());
         clazz.setLongitude(saveClazzRequestForm.getLongitude());
-        clazz.setCategory(saveClazzRequestForm.getCategory());
-
+        //add for categories
+        clazz.getCategories().addAll(saveClazzRequestForm.getCategories());
         clazzRepository.save(clazz);
     }
 
