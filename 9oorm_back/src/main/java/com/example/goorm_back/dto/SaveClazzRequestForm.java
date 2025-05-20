@@ -3,6 +3,8 @@ package com.example.goorm_back.dto;
 import com.example.goorm_back.domain.clazz.Category;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class SaveClazzRequestForm {
     private String clazzTitle; // 클래스명
@@ -11,5 +13,5 @@ public class SaveClazzRequestForm {
     private String clazzProfileImage; // 클래스 대표이미지
     private String latitude; // 위도
     private String longitude; // 경도
-    private Category category; // 카테고리
+    private List<Category> categories; // 카테고리
 }
