@@ -1,10 +1,10 @@
 spring:
   datasource:
-    #    url: jdbc:h2:tcp://localhost/~/testJPA2
     url: jdbc:h2:mem:test
     username: sa
     password:
     driver-class-name: org.h2.Driver
+
   application:
     name: groom_back
 
@@ -21,15 +21,14 @@ spring:
       client:
         registration:
           kakao:
-            client-id: 7bc70f2c1bef059689a29b15c6c2bebe
+            client-id: ${KAKAO_CLIENT_ID}
             client-secret: ${KAKAO_CLIENT_SECRET}
-            redirect-uri: "{ baseUrl }/auth/kakao/callback
+            redirect-uri: ${KAKAO_REDIRECT_URI}
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
               - account_email
             client-name: Kakao
-
         provider:
           kakao:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
@@ -37,17 +36,10 @@ spring:
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
 
-
-
-
-
-
-
-#    datasource:
-#      url: jdbc:h2:tcp://localhost/~/testJPA2
-#      username: sa
-#      password:
-#      driver-class-name: org.h2.Driver
 server:
   address: 0.0.0.0
   port: 8080
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+  expiration: ${JWT_EXPIRATION:86400000} # 1일 기본값 (ms)
