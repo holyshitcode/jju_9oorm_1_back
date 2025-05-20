@@ -1,8 +1,8 @@
 package com.example.goorm_back.controller;
 
-import static com.example.goorm_back.dto.KakaoTokenResponse.*;
+import static com.example.goorm_back.dto.KakaoTokenResponseDto.*;
 
-import com.example.goorm_back.dto.KakaoTokenResponse;
+import com.example.goorm_back.dto.KakaoTokenResponseDto;
 import com.example.goorm_back.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +16,13 @@ public class AuthController {
 	private final AuthService authService;
 
 	@GetMapping("/kakao/callback")
-	public ResponseEntity<KakaoTokenResponse> kakaoLogin(
+	public ResponseEntity<KakaoTokenResponseDto> kakaoLogin(
 		@RequestParam(required = false) String code) {
 
-		// ✅ 인가코드 누락된 경우 예외 처리
+		//  인가코드 누락된 경우 예외 처리
 		if (code == null || code.isBlank()) {
-			KakaoTokenResponse errorResponse = builder()
-				.success(false)
+			KakaoTokenResponseDto errorResponse = builder()
+				.isKakaoSuccess(false)
 				.code("AUTH-001")
 				.message("인가 코드가 전달되지 않았습니다.")
 				.build();
@@ -30,8 +30,9 @@ public class AuthController {
 			return ResponseEntity.badRequest().body(errorResponse);
 		}
 
-		// ✅ 카카오 accessToken 요청 → 이후 로그인 처리
-		String kakaoAccessToken = authService.getKaKaoAccessToken(code);
+		String kakaoAccessToken = authService.getKakaoAccessToken(code);
 		return authService.kakaoLogin(kakaoAccessToken);
 	}
+
+
 }
