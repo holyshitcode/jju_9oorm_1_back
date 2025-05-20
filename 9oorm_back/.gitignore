@@ -35,3 +35,17 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+### 
+# macOS 시스템 파일 무시
+.DS_Store
+.env
+
+# vim 임시 파일 무시
+*.swp
+*.swo
+*.swx
+
+# 개인 백업 폴더 무시
+temp_idea_backup/
