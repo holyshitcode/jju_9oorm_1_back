@@ -1,25 +1,35 @@
 package com.example.goorm_back.jwt;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.TestInstance;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
-public class JwtTokenProviderTest {
+@SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class JwtTokenProviderTest {
 
+	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
 
-	@BeforeEach
-	void setUp() {
-		jwtTokenProvider = new JwtTokenProvider();
+	@DynamicPropertySource
+	static void overrideJwtProps(DynamicPropertyRegistry registry) {
+		registry.add("jwt.secret", () -> "test-only-secret-key-should-not-use-in-prod");
+		registry.add("jwt.expiration", () -> "86400000");
 	}
 
 	@Test
-	void 토큰_생성_및_유효성_검사() {
+	@DisplayName("토큰 생성 및 유효성 검사")
+	void generateAndValidateToken() {
 		// given
-		Long userId = 123L;
+		Long userId = 1L;
 		String email = "test@example.com";
 		String role = "USER";
 
@@ -27,41 +37,46 @@ public class JwtTokenProviderTest {
 		String token = jwtTokenProvider.generateToken(userId, email, role);
 
 		// then
-		assertThat(token).isNotNull();
+		assertThat(token).isNotBlank();
 		assertThat(jwtTokenProvider.validateToken(token)).isTrue();
 	}
 
 	@Test
-	void 토큰에서_userId_추출_확인() {
+	@DisplayName("토큰에서 사용자 ID 추출 확인")
+	void extractUserIdFromToken() {
 		// given
-		Long userId = 456L;
-		String token = jwtTokenProvider.generateToken(userId, "test@aaa.com", "ADMIN");
+		Long expectedUserId = 999L;
+		String token = jwtTokenProvider.generateToken(expectedUserId, "aaa@aaa.com", "ADMIN");
 
 		// when
-		Long extractedId = jwtTokenProvider.getUserId(token);
+		Long actualUserId = jwtTokenProvider.getUserId(token);
 
 		// then
-		assertThat(extractedId).isEqualTo(userId);
+		assertThat(actualUserId).isEqualTo(expectedUserId);
 	}
 
 	@Test
-	void 요청에서_토큰_추출_테스트() {
+	@DisplayName("요청에서 Bearer 토큰 추출 확인")
+	void extractTokenFromRequest() {
 		// given
-		HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-		String fakeToken = "Bearer fake.jwt.token";
-		Mockito.when(request.getHeader("Authorization")).thenReturn(fakeToken);
+		HttpServletRequest mockRequest = mock(HttpServletRequest.class);
+		when(mockRequest.getHeader("Authorization")).thenReturn("Bearer abc.def.ghi");
 
 		// when
-		String extracted = jwtTokenProvider.resolveToken(request);
+		String result = jwtTokenProvider.resolveToken(mockRequest);
 
 		// then
-		assertThat(extracted).isEqualTo("fake.jwt.token");
+		assertThat(result).isEqualTo("abc.def.ghi");
 	}
 
 	@Test
-	void 환경변수_불러오기_테스트() {
-		String token = jwtTokenProvider.generateToken(1L, "a@a.com", "USER");
+	@DisplayName("환경 변수 기반 시크릿키 및 만료시간 설정 확인")
+	void checkSecretKeyAndExpirationFromEnv() {
+		// when
+		String token = jwtTokenProvider.generateToken(777L, "env@test.com", "USER");
+
+		// then
 		assertThat(token).isNotNull();
-		System.out.println("🧪 Generated Token: " + token);
+		System.out.println(" 환경변수로 생성된 토큰: " + token);
 	}
 }
