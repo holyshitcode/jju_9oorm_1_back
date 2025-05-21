@@ -3,6 +3,7 @@ package com.example.goorm_back.jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,12 @@ public class JwtTokenProvider {
 
 	@Value("${jwt.expiration}")
 	private long expirationTime;
+
+	@PostConstruct
+	public void init() {
+		System.out.println("🔐 secretKey = " + secretKey);
+		System.out.println("⏱ expirationTime = " + expirationTime);
+	}
 
 	// 🪄 토큰 생성
 	public String generateToken(Long userId, String email, String role) {
